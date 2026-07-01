@@ -4,6 +4,26 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Convite 15 anos | Maria Luiza</title>
+  <meta name="description" content="Convite digital dos 15 anos da Maria Luiza. Abra para confirmar presença, ver sugestões de presentes e o local da festa." />
+  <link rel="canonical" href="https://malu.niver.today/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Convite 15 anos | Maria Luiza" />
+  <meta property="og:title" content="Convite 15 anos | Maria Luiza" />
+  <meta property="og:description" content="Abra o convite digital: 08 de agosto de 2026, às 20:00." />
+  <meta property="og:url" content="https://malu.niver.today/" />
+  <meta property="og:image" content="https://malu.niver.today/assets/preview-whatsapp.png" />
+  <meta property="og:image:secure_url" content="https://malu.niver.today/assets/preview-whatsapp.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Convite dos 15 anos da Maria Luiza" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Convite 15 anos | Maria Luiza" />
+  <meta name="twitter:description" content="Abra o convite digital: 08 de agosto de 2026, às 20:00." />
+  <meta name="twitter:image" content="https://malu.niver.today/assets/preview-whatsapp.png" />
   <style>
     :root {
       --blue: #002f86;
@@ -18,17 +38,19 @@
 
     body {
       min-height: 100vh;
+      min-height: 100svh;
       margin: 0;
       display: grid;
       place-items: center;
-      padding: 20px;
+      padding: clamp(18px, 3.5svh, 34px) 20px max(clamp(26px, 5svh, 46px), env(safe-area-inset-bottom));
       color: var(--blue-dark);
       font-family: var(--font);
       background:
         radial-gradient(circle at var(--pointer-x, 50%) var(--pointer-y, 18%), rgba(223, 227, 234, .45), transparent 22%),
         radial-gradient(circle at 20% 16%, rgba(0, 47, 134, .26), transparent 28%),
         linear-gradient(135deg, #101827, #05070d 58%, #000000);
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     .sr-only {
@@ -44,7 +66,7 @@
     }
 
     .invite-shell {
-      width: min(92vw, 430px);
+      width: min(92vw, calc((100svh - 92px) * 810 / 1440), 430px);
       aspect-ratio: 810 / 1440;
       position: relative;
       overflow: hidden;
@@ -54,6 +76,12 @@
       isolation: isolate;
       transform: perspective(900px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
       transition: transform .18s ease-out;
+    }
+
+    @supports not (height: 100svh) {
+      .invite-shell {
+        width: min(92vw, calc((100vh - 92px) * 810 / 1440), 430px);
+      }
     }
 
     .invite-shell::after {
