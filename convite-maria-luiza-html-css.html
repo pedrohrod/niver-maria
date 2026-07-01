@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Convite 15 anos | Maria Luiza</title>
+  <style>
+    :root {
+      --blue: #002f86;
+      --blue-dark: #001a58;
+      --silver: #dfe3ea;
+      --paper: #f7f7f8;
+      --shadow: 0 28px 70px rgba(0, 0, 0, .38);
+      --font: Georgia, "Times New Roman", serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      color: var(--blue-dark);
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at var(--pointer-x, 50%) var(--pointer-y, 18%), rgba(223, 227, 234, .45), transparent 22%),
+        radial-gradient(circle at 20% 16%, rgba(0, 47, 134, .26), transparent 28%),
+        linear-gradient(135deg, #101827, #05070d 58%, #000000);
+      overflow: hidden;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .invite-shell {
+      width: min(92vw, 430px);
+      aspect-ratio: 810 / 1440;
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+      transform: perspective(900px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
+      transition: transform .18s ease-out;
+    }
+
+    .invite-shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 12;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(255, 255, 255, .42), transparent 18%),
+        linear-gradient(115deg, transparent 18%, rgba(255,255,255,.24) 24%, transparent 31%);
+      mix-blend-mode: screen;
+      opacity: .75;
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      transition: opacity .42s ease, transform .42s cubic-bezier(.2, .9, .2, 1), filter .42s ease;
+      will-change: opacity, transform;
+    }
+
+    .cover {
+      z-index: 3;
+      background-image: url("assets/convite-page-1.png");
+    }
+
+    .inside {
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(18px) scale(.985);
+      filter: blur(6px);
+      pointer-events: none;
+      background-image: url("assets/convite-page-2.png");
+    }
+
+    #openInvite:checked ~ .invite-shell .cover {
+      opacity: 0;
+      transform: translateY(-28px) scale(.98);
+      filter: blur(7px);
+      pointer-events: none;
+    }
+
+    #openInvite:checked ~ .invite-shell .inside {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+      pointer-events: auto;
+    }
+
+    .open-hotspot,
+    .back-hotspot,
+    .action {
+      position: absolute;
+      z-index: 20;
+      border: 0;
+      padding: 0;
+      color: transparent;
+      background: transparent;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .open-hotspot {
+      left: 4.5%;
+      top: 31%;
+      width: 91%;
+      height: 34%;
+    }
+
+    .back-hotspot {
+      left: 3%;
+      top: 2%;
+      width: 18%;
+      height: 9%;
+      display: none;
+    }
+
+    #openInvite:checked ~ .invite-shell .back-hotspot { display: block; }
+
+    .action {
+      top: 61.4%;
+      width: 21.4%;
+      height: 18.8%;
+      border-radius: 18px;
+      touch-action: manipulation;
+    }
+
+    .action.confirm { left: 18.2%; }
+    .action.gifts { left: 39.3%; }
+    .action.place { left: 60.4%; }
+
+    .open-hotspot:focus-visible,
+    .back-hotspot:focus-visible,
+    .action:focus-visible {
+      outline: 3px solid var(--silver);
+      outline-offset: 3px;
+      box-shadow: 0 0 22px rgba(0, 47, 134, .45);
+    }
+
+    .hint {
+      position: absolute;
+      z-index: 21;
+      left: 50%;
+      bottom: 7.8%;
+      translate: -50% 0;
+      width: max-content;
+      max-width: 80%;
+      padding: 8px 12px;
+      border: 1px solid rgba(0, 47, 134, .22);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .78);
+      color: var(--blue-dark);
+      font: 700 12px Arial, Helvetica, sans-serif;
+      letter-spacing: .01em;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, .12);
+      backdrop-filter: blur(7px);
+      animation: hintPulse 1.8s ease-in-out infinite;
+    }
+
+    #openInvite:checked ~ .invite-shell .hint { display: none; }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .confetti {
+      position: absolute;
+      top: -18px;
+      width: 8px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--piece-color, var(--blue));
+      box-shadow: 0 0 12px var(--piece-color, var(--blue));
+      animation: confettiFall var(--fall-time, 1.7s) cubic-bezier(.16, .84, .34, 1) forwards;
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes confettiFall {
+      to {
+        transform: translate3d(var(--drift, 0), 112vh, 0) rotate(var(--spin, 360deg));
+        opacity: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <input class="sr-only" type="checkbox" id="openInvite" />
+  <div class="confetti-layer" aria-hidden="true"></div>
+
+  <main class="invite-shell" aria-label="Convite de 15 anos da Maria Luiza">
+    <section class="page cover" aria-label="Capa do convite">
+      <label class="open-hotspot" for="openInvite" aria-label="Abrir convite">Abrir convite</label>
+      <span class="hint" aria-hidden="true">Clique no envelope para abrir</span>
+    </section>
+
+    <section class="page inside" aria-label="Detalhes do convite: Maria Luiza, 15 anos, 08 de agosto de 2026 as 20:00">
+      <label class="back-hotspot" for="openInvite" aria-label="Voltar para a capa">Voltar</label>
+
+      <!-- Troque o telefone abaixo pelo WhatsApp correto. Exemplo: 5534999999999 -->
+      <a class="action confirm" href="https://docs.google.com/forms/d/1GEqynFwMOxfdN_nOezjPSa8SbGdG6_VfoBcETPm4bL8/edit?usp=drivesdk" target="_blank" rel="noopener" aria-label="Confirmar presença">
+        Confirmar presença
+      </a>
+
+      <!-- Troque pelo link da lista de presentes -->
+      <a class="action gifts" href="https://niver.today/malu" target="_blank" rel="noopener" aria-label="Sugestões de presentes">
+        Sugestões de presentes
+      </a>
+
+      <!-- Troque pelo link real do Google Maps -->
+      <a class="action place" href="https://maps.app.goo.gl/7KCeNXgLebnrKgG48?g_st=ic" target="_blank" rel="noopener" aria-label="Local da festa">
+        Local da festa
+      </a>
+    </section>
+  </main>
+
+  <script>
+    const openInvite = document.querySelector('#openInvite');
+    const shell = document.querySelector('.invite-shell');
+    const confettiLayer = document.querySelector('.confetti-layer');
+    const actions = document.querySelectorAll('.action');
+    const motionAllowed = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const colors = ['#002f86', '#dfe3ea', '#ffffff', '#6f7784'];
+
+    function setPointerGlow(event) {
+      const x = Math.round((event.clientX / window.innerWidth) * 100);
+      const y = Math.round((event.clientY / window.innerHeight) * 100);
+      document.body.style.setProperty('--pointer-x', `${x}%`);
+      document.body.style.setProperty('--pointer-y', `${y}%`);
+
+      if (!shell) return;
+      const rect = shell.getBoundingClientRect();
+      const localX = ((event.clientX - rect.left) / rect.width) * 100;
+      const localY = ((event.clientY - rect.top) / rect.height) * 100;
+      const tiltX = ((localX - 50) / 50) * 2.8;
+      const tiltY = ((50 - localY) / 50) * 2.8;
+
+      shell.style.setProperty('--glow-x', `${localX}%`);
+      shell.style.setProperty('--glow-y', `${localY}%`);
+      shell.style.setProperty('--tilt-x', `${tiltX}deg`);
+      shell.style.setProperty('--tilt-y', `${tiltY}deg`);
+    }
+
+    function resetTilt() {
+      if (!shell) return;
+      shell.style.setProperty('--tilt-x', '0deg');
+      shell.style.setProperty('--tilt-y', '0deg');
+    }
+
+    function burstConfetti(total = 44) {
+      if (!motionAllowed || !confettiLayer) return;
+
+      for (let index = 0; index < total; index += 1) {
+        const piece = document.createElement('span');
+        piece.className = 'confetti';
+        piece.style.left = `${Math.random() * 100}%`;
+        piece.style.setProperty('--piece-color', colors[index % colors.length]);
+        piece.style.setProperty('--drift', `${Math.random() * 180 - 90}px`);
+        piece.style.setProperty('--spin', `${Math.random() * 720 - 360}deg`);
+        piece.style.setProperty('--fall-time', `${1.25 + Math.random() * 1.15}s`);
+        piece.style.animationDelay = `${Math.random() * .18}s`;
+        confettiLayer.appendChild(piece);
+        piece.addEventListener('animationend', () => piece.remove(), { once: true });
+      }
+    }
+
+    openInvite?.addEventListener('change', () => {
+      if (openInvite.checked) burstConfetti();
+    });
+
+    actions.forEach((action) => {
+      action.addEventListener('pointerenter', () => burstConfetti(8));
+    });
+
+    window.addEventListener('pointermove', setPointerGlow, { passive: true });
+    shell?.addEventListener('pointerleave', resetTilt);
+  </script>
+</body>
+</html>
